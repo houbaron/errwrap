@@ -1,7 +1,7 @@
 package panic
 
 import (
-	".."
+	"github.com/houbaron/errwrap"
 	"log"
 )
 

@@ -1,7 +1,7 @@
 package log
 
 import (
-	".."
+	"github.com/houbaron/errwrap"
 	"log"
 )
 
