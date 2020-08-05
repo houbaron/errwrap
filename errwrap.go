@@ -2,10 +2,17 @@ package errwrap
 
 type handlerType func(v interface{})
 
-var handler handlerType = panic
+var (
+	defaultHandler handlerType = panic
+	handler                    = defaultHandler
+)
 
 func SetHandler(f handlerType) {
 	handler = f
+}
+
+func ResetHandler() {
+	handler = defaultHandler
 }
 
 func baseHandle(handle handlerType, errs ...error) {
