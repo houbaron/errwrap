@@ -4,12 +4,12 @@ type Closer interface {
 	Close() error
 }
 
-func Close(closer Closer) {
+func Close(handler handlerType, closer Closer) {
 	if closer == nil {
 		return
 	}
 
 	if err := closer.Close(); err != nil {
-		Handle(err)
+		Handle(handler, err)
 	}
 }

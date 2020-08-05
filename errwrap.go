@@ -2,36 +2,19 @@ package errwrap
 
 type handlerType func(v interface{})
 
-var (
-	defaultHandler handlerType = panic
-	handler                    = defaultHandler
-)
-
-func SetHandler(f handlerType) {
-	handler = f
-}
-
-func ResetHandler() {
-	handler = defaultHandler
-}
-
-func baseHandle(handle handlerType, errs ...error) {
+func Handle(handler handlerType, errs ...error) {
 	for _, err := range errs {
 		if err != nil {
-			handle(err)
+			handler(err)
 		}
 	}
 }
 
-func Handle(errs ...error) {
-	baseHandle(handler, errs...)
-}
-
-func ReturnResult(result interface{}, err error) interface{} {
-	Handle(err)
+func ReturnResult(handler handlerType, result interface{}, err error) interface{} {
+	Handle(handler, err)
 	return result
 }
 
-func IgnoreResult(_ interface{}, err error) {
-	Handle(err)
+func IgnoreResult(handler handlerType, _ interface{}, err error) {
+	Handle(handler, err)
 }
