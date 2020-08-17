@@ -36,7 +36,10 @@ func (wrapper *Wrapper) Close(closer Closer) {
 }
 
 var (
-	PanicWrapper   = &Wrapper{Handler: panic}
+	PanicWrapper = &Wrapper{Handler: func(v interface{}) {
+		panic(v)
+	}}
+
 	PrintLnWrapper = &Wrapper{Handler: func(v interface{}) {
 		println(v)
 	}}
