@@ -45,7 +45,7 @@ var (
 	}}
 
 	PrintLnWrapper = &Wrapper{Handler: func(err error) {
-		println(err)
+		println(err.Error())
 	}}
 
 	DoNothingWrapper = &Wrapper{Handler: nil}
