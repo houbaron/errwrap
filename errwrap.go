@@ -13,6 +13,10 @@ type (
 )
 
 func (wrapper *Wrapper) handle(errs ...error) {
+	if wrapper.Handler == nil {
+		return
+	}
+
 	for _, err := range errs {
 		if err != nil {
 			wrapper.Handler(err)
@@ -43,4 +47,6 @@ var (
 	PrintLnWrapper = &Wrapper{Handler: func(v interface{}) {
 		println(v)
 	}}
+
+	DoNothingWrapper = &Wrapper{Handler: nil}
 )
