@@ -1,7 +1,7 @@
 package errwrap
 
 type (
-	HandlerType func(v interface{})
+	HandlerType func(err error)
 
 	Closer interface {
 		Close() error
@@ -40,12 +40,12 @@ func (wrapper *Wrapper) Close(closer Closer) {
 }
 
 var (
-	PanicWrapper = &Wrapper{Handler: func(v interface{}) {
-		panic(v)
+	PanicWrapper = &Wrapper{Handler: func(err error) {
+		panic(err)
 	}}
 
-	PrintLnWrapper = &Wrapper{Handler: func(v interface{}) {
-		println(v)
+	PrintLnWrapper = &Wrapper{Handler: func(err error) {
+		println(err)
 	}}
 
 	DoNothingWrapper = &Wrapper{Handler: nil}
