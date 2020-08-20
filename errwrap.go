@@ -1,5 +1,7 @@
 package errwrap
 
+import "errors"
+
 type (
 	HandlerType func(err error)
 
@@ -31,6 +33,14 @@ func (wrapper *Wrapper) ReturnResult(result interface{}, err error) interface{} 
 
 func (wrapper *Wrapper) IgnoreResult(_ interface{}, err error) {
 	wrapper.handle(err)
+}
+
+func (wrapper *Wrapper) IsResultNil(val interface{}, msg string) interface{} {
+	if val == nil {
+		wrapper.Handler(errors.New(msg))
+	}
+
+	return val
 }
 
 func (wrapper *Wrapper) Close(closer Closer) {
