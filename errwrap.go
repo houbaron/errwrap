@@ -10,34 +10,34 @@ type (
 	}
 
 	Wrapper struct {
-		Handler HandlerType
+		handler HandlerType
 	}
 )
 
-func (wrapper *Wrapper) handle(errs ...error) {
-	if wrapper.Handler == nil {
+func (wrapper *Wrapper) HandleErrors(errs ...error) {
+	if wrapper.handler == nil {
 		return
 	}
 
 	for _, err := range errs {
 		if err != nil {
-			wrapper.Handler(err)
+			wrapper.handler(err)
 		}
 	}
 }
 
 func (wrapper *Wrapper) ReturnResult(result interface{}, err error) interface{} {
-	wrapper.handle(err)
+	wrapper.HandleErrors(err)
 	return result
 }
 
 func (wrapper *Wrapper) IgnoreResult(_ interface{}, err error) {
-	wrapper.handle(err)
+	wrapper.HandleErrors(err)
 }
 
 func (wrapper *Wrapper) IsResultNil(val interface{}, msg string) interface{} {
 	if val == nil {
-		wrapper.Handler(errors.New(msg))
+		wrapper.handler(errors.New(msg))
 	}
 
 	return val
@@ -45,18 +45,22 @@ func (wrapper *Wrapper) IsResultNil(val interface{}, msg string) interface{} {
 
 func (wrapper *Wrapper) Close(closer Closer) {
 	if closer != nil {
-		wrapper.handle(closer.Close())
+		wrapper.HandleErrors(closer.Close())
 	}
 }
 
+func New(handler HandlerType) *Wrapper {
+	return &Wrapper{handler: handler}
+}
+
 var (
-	PanicWrapper = &Wrapper{Handler: func(err error) {
+	PanicWrapper = &Wrapper{handler: func(err error) {
 		panic(err)
 	}}
 
-	PrintLnWrapper = &Wrapper{Handler: func(err error) {
+	PrintLnWrapper = &Wrapper{handler: func(err error) {
 		println(err.Error())
 	}}
 
-	DoNothingWrapper = &Wrapper{Handler: nil}
+	DoNothingWrapper = &Wrapper{handler: nil}
 )
